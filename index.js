@@ -14,11 +14,21 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 const axios = require("axios");
 const fs = require("fs");
-app.use(
-  cors({
-    origin: "*", // or '*' for a less secure option that allows all origins
-  })
-);
+// app.use(
+//   cors({
+//     origin: "*", // or '*' for a less secure option that allows all origins
+//   })
+// );
+app.use((_, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*"); // '*' cho phép truy cập từ tất cả các nguồn
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
+
 // const manager = require('./langchain.js');
 const { all } = require("axios");
 var manager = require("./langchain.js");
