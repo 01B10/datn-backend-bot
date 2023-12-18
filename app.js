@@ -6,10 +6,7 @@ const app = express();
 const port = 3333;
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://fe-du-an-tot-nghiep-hrdg4lmqx-dangtienhung.vercel.app",
-    ], // or '*' for a less secure option that allows all origins
+    origin: true, // or '*' for a less secure option that allows all origins
   })
 );
 

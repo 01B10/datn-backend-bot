@@ -16,10 +16,7 @@ const axios = require("axios");
 const fs = require("fs");
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://fe-du-an-tot-nghiep-hrdg4lmqx-dangtienhung.vercel.app/",
-    ], // or '*' for a less secure option that allows all origins
+    origin: true // or '*' for a less secure option that allows all origins
   })
 );
 // const manager = require('./langchain.js');
@@ -374,10 +371,7 @@ app.post("/upload", upload.single("file"), async (req, res) => {
 });
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://fe-du-an-tot-nghiep-hrdg4lmqx-dangtienhung.vercel.app/",
-    ],
+    origin: true,
     credentials: true,
   })
 );
