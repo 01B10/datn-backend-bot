@@ -16,7 +16,7 @@ const axios = require("axios");
 const fs = require("fs");
 app.use(
   cors({
-    origin: "*" // or '*' for a less secure option that allows all origins
+    origin: "*", // or '*' for a less secure option that allows all origins
   })
 );
 // const manager = require('./langchain.js');
@@ -369,12 +369,12 @@ app.post("/upload", upload.single("file"), async (req, res) => {
   }).save();
   res.json(result);
 });
-app.use(
-  cors({
-    origin: "*",
-    credentials: true,
-  })
-);
+// app.use(
+//   cors({
+//     origin: "*",
+//     credentials: true,
+//   })
+// );
 
 server.listen(3333, () => {
   console.log("Server đang lắng nghe trên cổng 3333");
