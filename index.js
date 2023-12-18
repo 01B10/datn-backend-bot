@@ -16,7 +16,7 @@ const axios = require("axios");
 const fs = require("fs");
 app.use(
   cors({
-    origin: true // or '*' for a less secure option that allows all origins
+    origin: "*" // or '*' for a less secure option that allows all origins
   })
 );
 // const manager = require('./langchain.js');
@@ -371,7 +371,7 @@ app.post("/upload", upload.single("file"), async (req, res) => {
 });
 app.use(
   cors({
-    origin: true,
+    origin: "*",
     credentials: true,
   })
 );

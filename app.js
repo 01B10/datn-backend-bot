@@ -6,7 +6,7 @@ const app = express();
 const port = 3333;
 app.use(
   cors({
-    origin: true, // or '*' for a less secure option that allows all origins
+    origin: "*", // or '*' for a less secure option that allows all origins
   })
 );
 
