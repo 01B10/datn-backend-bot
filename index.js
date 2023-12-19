@@ -14,6 +14,7 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 const axios = require("axios");
 const fs = require("fs");
+const router = express.Router();
 // app.use(
 //   cors({
 //     origin: "*", // or '*' for a less secure option that allows all origins
@@ -122,7 +123,7 @@ const size = mongoose.model(
   })
 );
 
-app.get("/products", async (req, res) => {
+router.get("/products", async (req, res) => {
   try {
     const documents = await products
       .find({ is_active: true, is_deleted: false })
@@ -134,7 +135,7 @@ app.get("/products", async (req, res) => {
     });
   }
 });
-app.get("/size", async (req, res) => {
+router.get("/size", async (req, res) => {
   try {
     const documents = await size.find({});
     if (documents) res.json(documents);
@@ -144,7 +145,7 @@ app.get("/size", async (req, res) => {
     });
   }
 });
-app.get("/checkouts", async (req, res) => {
+router.get("/checkouts", async (req, res) => {
   try {
     const documents = await checkouts.find({});
     res.json(documents);
@@ -154,7 +155,8 @@ app.get("/checkouts", async (req, res) => {
     });
   }
 });
-app.get("/toppings", async (req, res) => {
+
+router.get("/toppings", async (req, res) => {
   try {
     const documents = await topping.find({});
     res.json(documents);
@@ -164,7 +166,8 @@ app.get("/toppings", async (req, res) => {
     });
   }
 });
-app.get("/", (req, res) => {
+
+router.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
 
@@ -200,13 +203,13 @@ io.on("connection", (socket) => {
   });
 });
 
-app.get("/update", async (req, res) => {
+router.get("/update", async (req, res) => {
   const manager = require("./langchain.js");
   await manager.train();
   await manager.save();
   res.send("ok");
 });
-app.get("/ask", async (req, res) => {
+router.get("/ask", async (req, res) => {
   const { query, id } = req.query;
 
   // const allData = await trained.findOne({});
@@ -276,7 +279,7 @@ app.get("/ask", async (req, res) => {
   }
 });
 
-app.get("/admin", async (req, res) => {
+router.get("/admin", async (req, res) => {
   res.sendFile(__dirname + "/add.html");
 });
 const pre_training = mongoose.model(
@@ -287,7 +290,7 @@ const pre_training = mongoose.model(
     question: String,
   })
 );
-app.get("/api/loadAll", async (req, res) => {
+router.get("/api/loadAll", async (req, res) => {
   const p = await pre_training.find({});
   var json = {};
   var onClass = [];
@@ -312,7 +315,7 @@ app.get("/api/loadAll", async (req, res) => {
   if (c) return res.json(onClass);
   res.json(json);
 });
-app.get("/api/add", async (req, res) => {
+router.get("/api/add", async (req, res) => {
   const { answer, classs, question } = req.query;
   await pre_training({
     class: classs,
@@ -322,12 +325,12 @@ app.get("/api/add", async (req, res) => {
 
   res.json({ status: true });
 });
-app.get("/api/delete", async (req, res) => {
+router.get("/api/delete", async (req, res) => {
   const { question } = req.query;
   await pre_training.deleteOne({ question: question });
   res.json({ status: true });
 });
-app.get("/api/train", async (req, res) => {
+router.get("/api/train", async (req, res) => {
   // const { NlpManager } = require('node-nlp');
   // const manager = new NlpManager({ languages: ['vi'] }); //
   const manager = require("./langchain.js");
@@ -349,7 +352,7 @@ app.get("/api/train", async (req, res) => {
   res.json({ status: true });
 });
 
-app.post("/upload", upload.single("file"), async (req, res) => {
+router.post("/upload", upload.single("file"), async (req, res) => {
   if (!req.file) {
     res.status(400).send("cần upload file");
     return;
@@ -385,6 +388,8 @@ app.post("/upload", upload.single("file"), async (req, res) => {
 //     credentials: true,
 //   })
 // );
+
+app.use("/", router);
 
 server.listen(3333, () => {
   console.log("Server đang lắng nghe trên cổng 3333");
